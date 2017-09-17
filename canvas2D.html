@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0 auto;
+        }
+        #canvas{
+            margin-left: 250px;
+        }
+    </style>
+</head>
+<body>
+<input type="button" value="按钮">
+<canvas id="canvas" style="border: 1px solid gray;" width="800px" height="500px"> </canvas>
+<p>目标：作出一个下雪的效果<br>
+随机出现像素块，像素块向下运动，速度越来越快。<br>
+实现了简单的优化，将纵坐标为大于等于25的不进行画出且不进行继续计算，感觉没有之前的卡顿感了  理想状态：数组中只保存能够呈现在画面上的坐标，（也许需要将横坐标也保存到x数组中）将纵坐标超出视口的都删掉
+</p>
+<p>画出多点移动的主要部分就是每一点的坐标都要计算出来<br/>下一个目的是当鼠标在视口的左/右，所有的方块都向左/右 移动，涉及到横坐标的计算，以及捕捉鼠标的位置，（届时可能需要将横坐标也保存的数组x中同时以纵坐标一起计算同时，验证条件需要验证横坐标是否超出视口2017年9月17日13:57:18）</p>
+<script>
+    var canvas=document.querySelector('#canvas');
+
+
+    function hh(x,y){
+        if(canvas.getContext){
+            var c=canvas.getContext('2d');
+            c.clearRect(0,0,800,500);
+            c.beginPath();
+//            for(var i=1;i<40;i++){
+//                c.moveTo(i*20,0);
+//                c.lineTo(i*20,500);
+//            }
+//            for(var o=1;o<25;o++){
+//                c.moveTo(0,o*20);
+//                c.lineTo(800,o*20);
+//            }
+            c.fillStyle='yellow';
+            c.fillRect(x*20,y*20,20,20);
+            c.stroke();
+        }
+
+    }
+    function bqc(x,y){
+        if(canvas.getContext){
+            var c=canvas.getContext('2d');
+            c.fillStyle='yellow';
+            c.fillRect(x*20,y*20,20,20);
+            c.stroke();
+        }
+
+    }
+    var zb=[];
+    var x=[];
+    var m=1;
+    function sz(){
+        var szh=Math.floor(Math.random()*40);
+        var szz=Math.floor(Math.random()*25);
+        zb.push(szh);
+        zb.push(szz);
+    }
+    var btn=document.querySelector('input');
+    function dj(){
+        sz();
+        var qq=zb[m];
+        hh(zb[m-1],zb[m]);
+        if(m-2 >0){
+            x.push(zb[m-2]);
+            x=x.map(function(item,index,arry){
+                if(item<25){
+                    var r=0.1;
+                    var f= item=item+(0.5+r);
+                    r=r+0.3;
+                    return f;
+                }
+                });
+
+            for(var h= x.length;h>0;h--){
+                if(x[h-1]<25){
+                    bqc(zb[(h-1)*2],x[h-1]);
+                }
+            }
+        }
+        m=m+2;
+    }
+    var cc=setInterval('dj()',0);
+</script>
+</body>
+</html>
